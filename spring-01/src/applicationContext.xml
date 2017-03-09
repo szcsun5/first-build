@@ -1,12 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-	xmlns="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
    <bean id="helloWorld" class="com.test.beans.Helloword">
    <property name="name" value="String"></property>
    
    </bean>
-
+   <bean id ="car" class="com.test.beans.Car">
+   <constructor-arg index="0" value="11"></constructor-arg>
+   <constructor-arg index="2" value="jeep"></constructor-arg>
+   <constructor-arg index="1" value="140"></constructor-arg>
+   </bean>
+    <bean id ="car2" class="com.test.beans.Car">
+   <constructor-arg index="0" value="13"></constructor-arg>
+   <constructor-arg index="2" value="BMW"></constructor-arg>
+   <constructor-arg index="1" value="110"></constructor-arg>
+   </bean>
+   <bean id="person" class="com.test.beans.Person">
+   <property name="name" value="tom"></property>
+   <property name="age" value="22"></property>
+   <!--可以使用property的ref属性建立bean之间的依赖关系 -->
+   <property name="car" ref="car"></property>
+   <property name="car.price" value="1223445"></property>
+   <property name="cars">
+   <list>
+   <ref bean="car"/>
+   <ref bean="car2"/>
+   </list>
+   </property> 
+   <property name="carMap">
+   <!-- 使用map类构建 -->
+   <map >
+   <entry key="AA">
+   <!-- 甚至可以在map内初始化 -->
+   <bean class="com.test.beans.Car">
+   <property name="price" value="12306"></property>
+   <property name="brand" value="hafu"></property>
+   <property name="crop" value="American"></property>
+   <property name="maxSpeedl" value="1818"></property>
+   </bean>
+   </entry>
+   <!-- 也可以直接指向对象 -->
+   <entry key="BB" value-ref="car2"></entry>
+   </map>
+   </property>
+   </bean>
+   <!-- 配置单例的集合bean，以供多个bean进行引用，需要导入util命名空间，详见Namespaces -->
+   <util:list id="cars">
+   <ref bean="car"/>
+   <ref bean="car2"/>
+   </util:list>
+   <bean id="person4" class="com.test.beans.Person">
+   <property name="cars" ref="cars"></property>
+   </bean>
+   <!-- 通过p命名空间来配置bean的属性,相对于property感觉更简洁一些 -->
+   <bean id="person5" class="com.test.beans.Person" p:age="50" p:name="szc" p:car-ref="car2">
+   </bean>
 </beans>
